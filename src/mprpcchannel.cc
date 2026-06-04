@@ -157,7 +157,7 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor* method,
         if(response->ParseFromString(response_str))
         {
             LOG(DEBUG) << "response_str: " << response_str;
-            std::cout << "response_str: " << response_str << std::endl; // 调试用
+            // std::cout << "response_str: " << response_str << std::endl; // 调试用
         }
         else
         {
