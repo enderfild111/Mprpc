@@ -1,0 +1,14 @@
+[2026-06-04 11:23:37][ERROR]logtest.cc:13:int main()-连接数据库失败
+[2026-06-04 11:23:49][ERROR]logtest.cc:13:int main()-连接数据库失败
+[2026-06-04 11:23:51][ERROR]logtest.cc:13:int main()-连接数据库失败
+[2026-06-04 11:27:58][WARNING]logtest.cc:12:int main()-配置文件不存在，使用默认配置
+[2026-06-04 11:27:58][ERROR]logtest.cc:13:int main()-连接数据库失败
+[2026-06-04 11:28:13][INFO]logtest.cc:11:int main()-开始监听端口 8888
+[2026-06-04 11:28:13][WARNING]logtest.cc:12:int main()-配置文件不存在，使用默认配置
+[2026-06-04 11:28:13][ERROR]logtest.cc:13:int main()-连接数据库失败
+[2026-06-04 11:28:23][INFO]logtest.cc:11:int main()-开始监听端口 8888
+[2026-06-04 11:28:23][WARNING]logtest.cc:12:int main()-配置文件不存在，使用默认配置
+[2026-06-04 11:28:23][ERROR]logtest.cc:13:int main()-连接数据库失败
+[2026-06-04 11:52:35][INFO]logtest.cc:11:int main()-开始监听端口 8888
+[2026-06-04 11:52:35][WARNING]logtest.cc:12:int main()-配置文件不存在，使用默认配置
+[2026-06-04 11:52:35][ERROR]logtest.cc:13:int main()-连接数据库失败

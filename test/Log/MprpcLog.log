@@ -1,0 +1,21 @@
+[2026-06-03 13:52:17][DEBUG]time.cc:9:int main()-RPC 框架初始化成功
+[2026-06-03 13:52:17][INFO]time.cc:10:int main()-开始监听端口 8888
+[2026-06-03 13:52:17][WARNING]time.cc:11:int main()-配置文件不存在，使用默认配置
+[2026-06-03 13:52:17][ERROR]time.cc:12:int main()-连接数据库失败
+[2026-06-03 13:55:52][DEBUG]time.cc:9:int main()-RPC 框架初始化成功
+[2026-06-03 13:55:52][INFO]time.cc:10:int main()-开始监听端口 8888
+[2026-06-03 13:55:52][WARNING]time.cc:11:int main()-配置文件不存在，使用默认配置
+[2026-06-03 13:55:52][ERROR]time.cc:12:int main()-连接数据库失败
+[2026-06-03 13:55:54][DEBUG]time.cc:9:int main()-RPC 框架初始化成功
+[2026-06-03 13:55:54][INFO]time.cc:10:int main()-开始监听端口 8888
+[2026-06-03 13:55:54][WARNING]time.cc:11:int main()-配置文件不存在，使用默认配置
+[2026-06-03 13:55:54][ERROR]time.cc:12:int main()-连接数据库失败
+[2026-06-03 13:56:03][DEBUG]time.cc:9:int main()-RPC 框架初始化成功
+[2026-06-03 13:56:03][INFO]time.cc:10:int main()-开始监听端口 8888
+[2026-06-03 13:56:03][WARNING]time.cc:11:int main()-配置文件不存在，使用默认配置
+[2026-06-03 13:56:03][ERROR]time.cc:12:int main()-连接数据库失败
+[2026-06-04 10:21:51][DEBUG]logtest.cc:10:int main()-RPC 框架初始化成功
+[2026-06-04 10:21:51][INFO]logtest.cc:11:int main()-开始监听端口 8888
+[2026-06-04 10:21:51][WARNING]logtest.cc:12:int main()-配置文件不存在，使用默认配置
+[2026-06-04 10:21:51][ERROR]logtest.cc:13:int main()-连接数据库失败
+[2026-06-04 10:22:15][ERROR]logtest.cc:13:int main()-连接数据库失败
