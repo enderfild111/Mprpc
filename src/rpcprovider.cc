@@ -1,6 +1,8 @@
 #include "rpcprovider.h"
+#include "mprpczookeeper.h"
 #include <functional>
-#include<arpa/inet.h> // for htonl and ntohl
+#include <sstream>
+#include <arpa/inet.h> // for htonl and ntohl
 // 发布rpc方法的接口，供框架使用者调用
 void RpcProvider::NotifyService(google::protobuf::Service *service)
 {
@@ -40,6 +42,24 @@ void RpcProvider::Run()
     );
     // 设置muduo的线程数量
     server.setThreadNum(4);
+    ZookeeperClient zkc;
+    zkc.Start();
+
+    for(auto& service : m_serviceInfoMap)
+    {
+        std::string service_path = "/" + service.first;
+        zkc.Create(service_path.c_str(),nullptr,0);
+        for(auto& method : service.second.m_methodMap)
+        {
+            std::string method_path = service_path + "/" + method.first;
+            std::ostringstream oss;
+            oss << ip << ":" << port;
+            std::string method_data = oss.str();
+            zkc.Create(method_path.c_str(), method_data.c_str(),method_data.length(),ZOO_EPHEMERAL);
+        }
+    }
+
+
     std::cout << "RpcProvider start service at " << ip << ":" << port << std::endl;
     server.start(); // 启动服务器
     m_eventLoop.loop(); // 进入事件循环，等待客户端连接和请求 // Epoll.wait()

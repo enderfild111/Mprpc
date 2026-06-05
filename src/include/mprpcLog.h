@@ -52,7 +52,6 @@ struct LogMsg
             return "";
         }
     }
-
     std::string format() const
     {
         auto time = std::chrono::system_clock::to_time_t(timestamp);
@@ -87,6 +86,29 @@ public:
             .location = loc,
             .timestamp = std::chrono::system_clock::now()
         });
+    }
+    LogLevel string_to_Level(const std::string &level) const
+    {
+        if (level == "INFO")
+        {
+            return LogLevel::INFO;
+        }
+        else if (level == "DEBUG")
+        {
+            return LogLevel::DEBUG;
+        }
+        else if (level == "WARNING")
+        {
+            return LogLevel::WARNING;
+        }
+        else if (level == "ERROR")
+        {
+            return LogLevel::ERROR;
+        }
+        else
+        {
+            return LogLevel::INFO;
+        }
     }
     void openFile()
     {

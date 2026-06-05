@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
-
+#include "mprpcLog.h"
 void ShowArgcHelp()
 {
     std::cout << "format: command -i <configfile>" << std::endl;
@@ -48,6 +48,8 @@ void MprpcApplication::Init(int argc, char *argv[])
     std::cout << "zookeeper_ip: " << config.Load("zookeeperip") << std::endl;
     std::cout << "zookeeper_port: " << config.Load("zookeeperport") << std::endl;
     */
+    auto logLevel = MprpcLogger::getInstance().string_to_Level(config.Load("logLevel"));
+    MprpcLogger::getInstance().set_minLogLevel(logLevel);
 }
 
 MprpcApplication& MprpcApplication::GetInstance()
