@@ -73,7 +73,9 @@ std::string ZookeeperClient::GetData(const char* path)
 {
     char buf[128];
     int buflen = sizeof(buf);
+    
     int flag = zoo_get(zkhandle_,path,0,buf,&buflen,nullptr);
+
     if(flag == ZOK)
     {
         return buf;

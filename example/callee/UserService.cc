@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <thread>
 #include "user.pb.h"
 #include "mprpcapplication.h"
 #include "rpcprovider.h"
@@ -11,6 +13,7 @@ public:
     {
         // 简单的登录逻辑，实际应用中会更复杂
         std::cout << "UserService: Logging in user " << username << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         return true;
     }
 

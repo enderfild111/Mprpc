@@ -1,6 +1,8 @@
 #include "rpcprovider.h"
 #include "mprpczookeeper.h"
+#include "mprpcClosure.h"
 #include <functional>
+#include "mprpcLog.h"
 #include <sstream>
 #include <arpa/inet.h> // for htonl and ntohl
 // 发布rpc方法的接口，供框架使用者调用
@@ -83,8 +85,7 @@ RpcProvider::ParseResult RpcProvider::parseRpcMessage(muduo::net::Buffer* buf, m
         return ParseResult::kInComplete; // 数据不完整，等待下一次数据到来
     }
     uint32_t header_size = buf->peekInt32(); // 读取前4个字节，得到header_size
-    std::cout << "DEBUG header_size: " << header_size
-          << ", readable: " << buf->readableBytes() << std::endl;
+    // std::cout << "DEBUG header_size: " << header_size << ", readable: " << buf->readableBytes() << std::endl;
     if(buf->readableBytes() < 4 + header_size)
     {
         return ParseResult::kInComplete; // 数据不完整，等待下一次数据到来
@@ -102,7 +103,8 @@ RpcProvider::ParseResult RpcProvider::parseRpcMessage(muduo::net::Buffer* buf, m
     }
     else
     {
-        std::cout << "rpc_header_str: " << header_str << " parse error!" << std::endl;
+        LOG(ERROR) << "rpc_header_str: " << header_str << " parse error!";
+        // std::cout << "rpc_header_str: " << header_str << " parse error!" << std::endl;
         return ParseResult::kError; // 解析错误
     }
     if(buf->readableBytes() < 4 + header_size + args_size)
@@ -168,12 +170,14 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr& conn,
         ParseResult result = parseRpcMessage(buf, &rpc_header, args_str);
         if(result == ParseResult::kInComplete)
         {
-            std::cout << "recv data is incomplete, wait for next recv data!" << std::endl;
+            LOG(INFO) << "recv data is incomplete, wait for next recv data!";
+            // std::cout << "recv data is incomplete, wait for next recv data!" << std::endl;
             break; // 数据不完整，等待下一次数据到来
         }
         else if(result == ParseResult::kError)
         {
-            std::cout << "recv data is error!" << std::endl;
+            LOG(ERROR) << "recv data is error!";
+            // std::cout << "recv data is error!" << std::endl;
             conn -> shutdown(); // 解析错误，关闭连接
             return; // 解析错误
         }
@@ -183,7 +187,8 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr& conn,
         auto service_it = m_serviceInfoMap.find(service_name);
         if(service_it == m_serviceInfoMap.end())
         {
-            std::cerr << "service: " << service_name << " is not exist!" << std::endl;
+            LOG(ERROR) << "service: " << service_name << " is not exist!";
+            // std::cerr << "service: " << service_name << " is not exist!" << std::endl;
             conn -> shutdown(); // 服务不存在，关闭连接
             return;
         }
@@ -191,17 +196,19 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr& conn,
         auto method_it = service_it -> second.m_methodMap.find(method_name);
         if(method_it == service_it -> second.m_methodMap.end())
         {
-            std::cerr << service_name << "method: " << method_name << " is not exist!" << std::endl;
+            LOG(ERROR) << service_name << "method: " << method_name << " is not exist!";
+            // std::cerr << service_name << "method: " << method_name << " is not exist!" << std::endl;
             conn -> shutdown(); // 方法不存在，关闭连接
             return;
         }
         const google::protobuf::MethodDescriptor* method = method_it -> second; // 获取方法
 
         google::protobuf::Message* request = service -> GetRequestPrototype(method).New();
-
+        // std::cout << "args_str: " << args_str << std::endl;
         if(!request -> ParseFromString(args_str))
         {
-            std::cerr << "request parse error!" << std::endl;
+            LOG(ERROR) << "request parse error!";
+            // std::cerr << "request parse error!" << std::endl;
             return;
         }
 
@@ -213,9 +220,10 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr& conn,
         google::protobuf::Message*>
         (
             this, &RpcProvider::sendRpcResponse, conn, response
-        ); 
+        );
         // 在框架上进行一次rpc方法调用
-        service -> CallMethod(method,nullptr,request,response,done);
+        google::protobuf::Closure * safedone = new MprpcClosure(done,response);
+        service -> CallMethod(method,nullptr,request,response,safedone);
     }
 }
 
@@ -233,7 +241,7 @@ void RpcProvider::sendRpcResponse(const muduo::net::TcpConnectionPtr& conn, goog
     }
     else
     {
-        std::cerr << "response serialize error!" << std::endl;
+        LOG(ERROR) << "response serialize error!";
         delete response; // 释放响应对象的内存
     }
     // 采用长连接

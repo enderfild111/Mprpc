@@ -1,6 +1,7 @@
 #include <iostream>
 #include "user.pb.h"
 #include "mprpcapplication.h"
+#include <chrono>
 #include "mprpcLog.h"
 
 int main(int argc, char* argv[])
@@ -15,7 +16,9 @@ int main(int argc, char* argv[])
     request.set_pwd("123456");
     example::LoginResponse response;
     MprpcController controller;
+    std::cout << "call begin: " << std::chrono::system_clock::now() << std::endl;
     stub.Login(&controller, &request, &response, nullptr);
+    std::cout << "call end: " << std::chrono::system_clock::now() << std::endl;
     auto xx = std::filesystem::current_path();
     std::cout << "current path: " << xx << std::endl;
     if(controller.Failed())
